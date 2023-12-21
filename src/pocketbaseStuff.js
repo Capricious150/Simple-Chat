@@ -2,7 +2,7 @@ import PocketBase from 'pocketbase';
 
 const pb = new PocketBase('http://127.0.0.1:8090');
 
-async function logInAsAdmin () {
+export async function logInAsAdmin () {
     return await pb.admins.authWithPassword('austinandrews89@gmail.com', 'TKE_by_1178');
 }
 

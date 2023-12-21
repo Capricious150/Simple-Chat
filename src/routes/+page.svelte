@@ -3,13 +3,13 @@
     import { onDestroy, onMount } from 'svelte';
     import { goto } from '$app/navigation';
     
-    let authedValue = false;
+    let authedValue;
     const unsub = authedWritable.subscribe((value) => authedValue = value);
 
     onMount(() => {
-        if (authedValue === false) {
+        if (authedValue.authed === false) {
              goto('/auth');
-        } else if (authedValue === true) {
+        } else if (authedValue.authed === true) {
             goto('/home')
         }
     })
