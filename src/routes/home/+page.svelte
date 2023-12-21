@@ -1,9 +1,21 @@
 <script>
     import PocketBase, { CollectionService } from 'pocketbase';
+    import { authedWritable } from '../../store';
+    import { onDestroy, onMount } from 'svelte';
 
     const pb = new PocketBase('http://127.0.0.1:8090');
-
+    let authedContent;
+    const unsub = authedWritable.subscribe((value) => authedContent = value);
     let postLists = [];
+
+    onMount(() => {
+        pb.collection('posts').subscribe('*', (event) => {
+        // console.log(event.action)
+        console.log(event.record)
+        postLists = [...postLists, event.record]
+        // posts = [...posts, event.record]
+    })
+    })
     async function getPosts() {
         const posts = await pb.collection('posts').getFullList({
             sort: 'created'
@@ -13,53 +25,79 @@
     }
 
     getPosts();
-    
-    pb.collection('posts').subscribe('*', (event) => {
-        // console.log(event.action)
-        console.log(event.record)
-        postLists = [...postLists, event.record]
-        // posts = [...posts, event.record]
-
-    })
-
     let postBody = "";
 
-    function postMessage (string) {
-        if (typeof string !== "string") {
+    async function postMessage (string) {
+        console.log('posting')
+        console.log(postBody);
+        if (typeof string !== "string" || string === "") {
             return null;
         }
 
-        pb.collection('posts').create({
+        const response = await pb.collection('posts').create({
             recipient: 'main',
-            body: string
+            body: string,
+            poster: authedContent.user
         })
 
-        
+        postBody = "";
+        return response;        
     }
 
+    
+
+    onDestroy(() => {
+        unsub;
+        pb.collection('posts').unsubscribe();
+    });
 
 </script>
 
 
-<div>
-    <h1>Simple Chat App</h1>
-    <p>For learning</p>
+<div class="chatWrapper">
+    <div class="pageHead">
+        <h1>Simple Chat App</h1>
+    </div>
     <div class = "textHome">
         {#each postLists as post}
-            <p>{post.body}</p>
-        {/each}}
+            <p>{post.poster} ({
+                new Date(post.created).toLocaleTimeString()
+            }): &nbsp; {post.body}</p>
+        {/each}
     </div>
     <br/>
-    <input class = "postBox" type="text" on:change={(event) => postBody = event.target.value}/>
-
-    <button on:click={postMessage(postBody)}>Post</button>
-    <button on:click={() => console.log(postLists)}>Read Posts</button>
+    <input 
+        class = "postBox" 
+        type="text" 
+        on:change={(event) => postBody = event.target.value} 
+        on:keydown={(event) => {
+            if (event.key === 'Enter') {
+                postMessage(event.target.value)
+            }
+        }}
+        value = {postBody}/>
+    <div class="buttonBox">
+        <!-- <button on:click={postMessage(postBody)}>Post</button> -->
+        <button on:click={() => console.log(postLists)}>DEBUG BUTTON</button>
+    </div>
 </div>
 
 <style>
+    
+    .chatWrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .pageHead {
+        width: 80vw;
+    }
+
     .postBox {
         height: 4rem;
-        width: 90vw;
+        width: 82vw;
         border-radius: 10px;
         margin-right: 1rem;
         overflow-y: auto;
@@ -69,7 +107,12 @@
         border: 2px darkgray solid;
         border-radius: 20px;
         height: 60vh;
-        width: 90vw;
+        width: 80vw;
+        overflow-y: auto;
         padding: 2rem;
         }
+
+    .buttonBox {
+        margin: 1rem;
+    }
 </style>

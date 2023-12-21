@@ -28,7 +28,7 @@ async function authUser () {
     if (response.token) {
         $authedWritable.authed = true;
         $authedWritable.token = response.token;
-
+        $authedWritable.user = username;
         goto('/home');
     }
 }
