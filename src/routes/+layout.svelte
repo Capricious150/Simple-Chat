@@ -7,10 +7,7 @@
         background-color: black;
         color: white;
         margin: 0;
-        height: 100vh;
+        height: 100svh;
         width: auto;
-        padding: 1rem;
-        padding-top: 3rem;
-        padding-left: 2rem;
     }    
 </style>

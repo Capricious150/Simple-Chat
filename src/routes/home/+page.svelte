@@ -1,19 +1,19 @@
 <script>
     import PocketBase, { CollectionService } from 'pocketbase';
     import { authedWritable } from '../../store';
-    import { onDestroy, onMount } from 'svelte';
+    import { afterUpdate, beforeUpdate, onDestroy, onMount } from 'svelte';
 
     const pb = new PocketBase('http://127.0.0.1:8090');
     let authedContent;
     const unsub = authedWritable.subscribe((value) => authedContent = value);
     let postLists = [];
+    let textHomeDiv;
 
     onMount(() => {
         pb.collection('posts').subscribe('*', (event) => {
         // console.log(event.action)
-        console.log(event.record)
+        // console.log(event.record)
         postLists = [...postLists, event.record]
-        // posts = [...posts, event.record]
     })
     })
     async function getPosts() {
@@ -28,8 +28,8 @@
     let postBody = "";
 
     async function postMessage (string) {
-        console.log('posting')
-        console.log(postBody);
+        // console.log('posting');
+        // console.log(postBody);
         if (typeof string !== "string" || string === "") {
             return null;
         }
@@ -44,7 +44,28 @@
         return response;        
     }
 
+    function checkScrollPosition (element) {
+        // console.log(element.scrollHeight - element.clientHeight <= element.scrollTop + 1)
+        return element.scrollHeight - element.clientHeight <= element.scrollTop + 1;
+    }
+
+    function handleScrolling(element) {
+        element.scrollTop = element.scrollHeight;
+    }
+
     
+    $: if (postLists.length > 0) {
+        
+        let scroll = false;
+        beforeUpdate(() => {
+            scroll = checkScrollPosition(textHomeDiv);
+        })
+        afterUpdate(() => {
+            if (scroll) {
+                handleScrolling(textHomeDiv);
+            }
+        });
+    }
 
     onDestroy(() => {
         unsub;
@@ -58,7 +79,7 @@
     <div class="pageHead">
         <h1>Simple Chat App</h1>
     </div>
-    <div class = "textHome">
+    <div bind:this={textHomeDiv} class = "textHome">
         {#each postLists as post}
             <p>{post.poster} ({
                 new Date(post.created).toLocaleTimeString()
@@ -109,8 +130,9 @@
         height: 60vh;
         width: 80vw;
         overflow-y: auto;
-        padding: 2rem;
-        }
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
 
     .buttonBox {
         margin: 1rem;
