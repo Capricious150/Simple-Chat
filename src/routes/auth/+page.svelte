@@ -3,7 +3,8 @@ import { logInAsUser } from "../../pocketbaseStuff";
 import { authedWritable } from "../../store";
 import { goto } from "$app/navigation";
 import { onDestroy, onMount } from "svelte";
-    import { redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
+import { base } from "$app/paths"
 
 
 let authedContent;
@@ -13,7 +14,7 @@ onMount(() => {
     // console.log(authedContent)
     if (authedContent?.token) {
         console.log("You're already authed")
-        goto('home');
+        goto(base + '/home');
         // throw redirect(300, '/home')
     }
 })
@@ -30,7 +31,7 @@ async function authUser () {
         $authedWritable.authed = true;
         $authedWritable.token = response.token;
 
-        goto('/home');
+        goto(base + '/home');
     }
 }
 

@@ -2,15 +2,16 @@
     import { authedWritable } from '../store';
     import { onDestroy, onMount } from 'svelte';
     import { goto } from '$app/navigation';
+    import { base } from '$app/paths';
     
     let authedValue;
     const unsub = authedWritable.subscribe((value) => authedValue = value);
 
     onMount(() => {
         if (authedValue.authed === false) {
-             goto('/auth');
+             goto(base + '/auth');
         } else if (authedValue.authed === true) {
-            goto('/home')
+            goto(base + '/home')
         }
     })
 
