@@ -1,4 +1,5 @@
 <script> 
+//@ts-nocheck
 import { logInAsUser } from "../../pocketbaseStuff";
 import { authedWritable } from "../../store";
 import { goto } from "$app/navigation";

@@ -1,4 +1,5 @@
 <script>
+    //@ts-nocheck
     import PocketBase, { CollectionService } from 'pocketbase';
     import { authedWritable } from '../../store';
     import { afterUpdate, beforeUpdate, onDestroy, onMount } from 'svelte';
