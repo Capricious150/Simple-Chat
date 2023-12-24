@@ -23,7 +23,7 @@ let password = ''
 
 
 
-async function authUser () {
+async function authUser (username, password) {
     let response = await logInAsUser(username, password);
 
     if (response.token) {
@@ -37,21 +37,48 @@ async function authUser () {
 onDestroy(unsub);
 </script>
 
-<h1> AUTH </h1>
-<input on:change ={(event) => {
-    //@ts-ignore
-    if (event.target && event.target.value) username = (event.target.value)}
-}/>
-<input on:change ={(event) => {
-    //@ts-ignore
-    if (event.target && event.target.value) password = (event.target.value)}
-}/>
-<button on:click={authUser}>
-    Test
-</button>
+<div class="AuthWrapper">
+    <h3> Please sign in </h3>
+    <br />
+    <input on:change ={(event) => {
+        //@ts-ignore
+        if (event.target && event.target.value) username = (event.target.value)}
+    }
+    
+    on:keydown = {(event) => {
+        if (event.key === 'Enter') {
+            authUser(event.target.value, password)
+        }
+    }}
+    />
+    <input on:change ={(event) => {
+        //@ts-ignore
+        if (event.target && event.target.value) {
+            password = (event.target.value)
+        }}
+    }
+    on:keydown = {(event) => {
+        if (event.key === 'Enter') {
+            authUser(username, event.target.value)
+        }
+    }}
+    />
+    <br />
+    <br />
+    <button on:click={authUser(username, password)}>
+        Sign In
+    </button>
+</div>
 
 <style>
-    h1 {
+    h3 {
         color: white;
+        margin: 0;
     }
+
+    .AuthWrapper {
+        padding-block: 20vh;
+        padding-inline: 30vw;
+    }
+
 </style>

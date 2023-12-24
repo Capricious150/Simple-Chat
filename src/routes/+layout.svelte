@@ -7,7 +7,8 @@
         background-color: black;
         color: white;
         margin: 0;
-        height: 100svh;
+        min-height: 100svh;
+        height: 100%;
         width: auto;
     }    
 </style>

@@ -100,7 +100,7 @@
         value = {postBody}/>
     <div class="buttonBox">
         <!-- <button on:click={postMessage(postBody)}>Post</button> -->
-        <button on:click={() => console.log(postLists)}>DEBUG BUTTON</button>
+        <!-- <button on:click={() => console.log(postLists)}>DEBUG BUTTON</button> -->
     </div>
 </div>
 
