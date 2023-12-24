@@ -19,6 +19,7 @@
 
 <div>
     <h1>HOME</h1>
+    <h3>Please wait to be redirected</h3>
 </div>
 
 <style>

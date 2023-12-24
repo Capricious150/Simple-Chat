@@ -9,6 +9,7 @@
     const unsub = authedWritable.subscribe((value) => authedContent = value);
     let postLists = [];
     let textHomeDiv;
+    let shiftDown = false;
 
     onMount(() => {
         pb.collection('posts').subscribe('*', (event) => {
@@ -28,12 +29,19 @@
     getPosts();
     let postBody = "";
 
+    function postProcessor (string) {
+        console.log(string);
+        return string;
+    }
+
     async function postMessage (string) {
         // console.log('posting');
         // console.log(postBody);
         if (typeof string !== "string" || string === "") {
             return null;
         }
+
+        console.log(string)
 
         const response = await pb.collection('posts').create({
             recipient: 'main',
@@ -82,22 +90,29 @@
     </div>
     <div bind:this={textHomeDiv} class = "textHome">
         {#each postLists as post}
-            <p>{post.poster} ({
+            <p class="post">{post.poster} ({
                 new Date(post.created).toLocaleTimeString()
-            }): &nbsp; {post.body}</p>
+            }): &nbsp; {postProcessor(post.body)}</p>
         {/each}
     </div>
     <br/>
-    <input 
-        class = "postBox" 
-        type="text" 
+    <textarea 
+        class = "textInput" 
         on:change={(event) => postBody = event.target.value} 
         on:keydown={(event) => {
-            if (event.key === 'Enter') {
+            if (event.key === "Shift") shiftDown = true
+
+            if (event.key === 'Enter' && shiftDown === false) {
                 postMessage(event.target.value)
             }
         }}
-        value = {postBody}/>
+        on:keyup={(event) => {
+            if (event.key === "Shift") {
+                shiftDown = false
+            }
+        }}
+        bind:value = {postBody}
+        />
     <div class="buttonBox">
         <!-- <button on:click={postMessage(postBody)}>Post</button> -->
         <!-- <button on:click={() => console.log(postLists)}>DEBUG BUTTON</button> -->
@@ -117,8 +132,9 @@
         width: 80vw;
     }
 
-    .postBox {
+    .textInput {
         height: 4rem;
+        padding: 0.5rem;
         width: 82vw;
         border-radius: 10px;
         margin-right: 1rem;
@@ -137,5 +153,16 @@
 
     .buttonBox {
         margin: 1rem;
+    }
+
+    .post {
+        transition-duration: 500ms;
+        white-space: pre-line;
+    }
+    
+    .post:hover {
+        cursor: pointer;
+        transition-delay: 1000ms;
+        font-size: 1.5rem;
     }
 </style>
