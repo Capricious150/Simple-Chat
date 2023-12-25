@@ -1,17 +1,19 @@
 <script>
     //@ts-nocheck
-    import PocketBase, { CollectionService } from 'pocketbase';
+    import PocketBase from 'pocketbase';
+    import { initializePb } from '../../pocketbaseStuff';
     import { authedWritable } from '../../store';
     import { afterUpdate, beforeUpdate, onDestroy, onMount } from 'svelte';
 
-    const pb = new PocketBase('http://127.0.0.1:8090');
     let authedContent;
     const unsub = authedWritable.subscribe((value) => authedContent = value);
     let postLists = [];
     let textHomeDiv;
     let shiftDown = false;
 
-    onMount(() => {
+    onMount(async () => {
+        const pb = await initializePb();
+        if (pb === null) return null;
         pb.collection('posts').subscribe('*', (event) => {
         // console.log(event.action)
         // console.log(event.record)
@@ -19,6 +21,9 @@
     })
     })
     async function getPosts() {
+
+        const pb = await initializePb();
+        if (pb === null) return null;
         const posts = await pb.collection('posts').getFullList({
             sort: 'created'
         })
@@ -30,19 +35,20 @@
     let postBody = "";
 
     function postProcessor (string) {
-        console.log(string);
+        // console.log(string);
         return string;
     }
 
     async function postMessage (string) {
         // console.log('posting');
-        // console.log(postBody);
+        // console.log(authedContent);
         if (typeof string !== "string" || string === "") {
             return null;
         }
 
-        console.log(string)
-
+        // console.log(string)
+        const pb = await initializePb();
+        if (pb === null) return null;
         const response = await pb.collection('posts').create({
             recipient: 'main',
             body: string,
@@ -76,8 +82,10 @@
         });
     }
 
-    onDestroy(() => {
+    onDestroy(async () => {
         unsub;
+        const pb = await initializePb();
+        if (pb === null) return null;
         pb.collection('posts').unsubscribe();
     });
 

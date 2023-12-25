@@ -65,9 +65,9 @@ onDestroy(unsub);
     />
     <br />
     <br />
-    <button on:click={authUser(username, password)}>
+    <!-- <button on:click={authUser(username, password)}>
         Sign In
-    </button>
+    </button> -->
 </div>
 
 <style>
