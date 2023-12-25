@@ -1,3 +1,4 @@
+//@ts-nocheck
 import PocketBase from 'pocketbase';
 
 export async function initializePb() {

@@ -40,6 +40,7 @@ onDestroy(unsub);
 <div class="AuthWrapper">
     <h3> Please sign in </h3>
     <br />
+    <p>Username: &nbsp; 
     <input on:change ={(event) => {
         //@ts-ignore
         if (event.target && event.target.value) username = (event.target.value)}
@@ -51,7 +52,11 @@ onDestroy(unsub);
         }
     }}
     />
-    <input on:change ={(event) => {
+    </p>
+    <p>Password: &nbsp;
+    <input 
+    id="smallMarginLeft"
+    on:change ={(event) => {
         //@ts-ignore
         if (event.target && event.target.value) {
             password = (event.target.value)
@@ -63,11 +68,11 @@ onDestroy(unsub);
         }
     }}
     />
-    <br />
-    <br />
-    <!-- <button on:click={authUser(username, password)}>
-        Sign In
-    </button> -->
+    </p>
+    <br/>
+    <button on:click={authUser(username, password)}>
+        Submit
+    </button>
 </div>
 
 <style>
@@ -79,6 +84,10 @@ onDestroy(unsub);
     .AuthWrapper {
         padding-block: 20vh;
         padding-inline: 30vw;
+    }
+
+    #smallMarginLeft {
+        margin-left: 3px;
     }
 
 </style>
