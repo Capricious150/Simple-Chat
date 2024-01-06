@@ -76,6 +76,7 @@ onDestroy(unsub);
         <label for="passInput">Password</label>
         </span>
         <button 
+            id="submitButton"
             on:click={authUser(username, password)}
         >
             Submit
@@ -90,6 +91,7 @@ onDestroy(unsub);
         box-shadow: none;
         border: none;
         background-color: inherit;
+        font-size: 100%;
     }
 
     .AuthWrapper {
@@ -111,16 +113,21 @@ onDestroy(unsub);
         align-items: center;
         min-height: 50vh;
         min-width: 20vw;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
     }
 
     .AuthInput {
-        border-radius: 15px;
-        width: 16rem;
+        border-radius: 10px;
+        max-width: 16rem;
         height: 2rem;
         font-size: 120%;
         max-width: 100%;
         padding-left: 1rem;
         margin-top: 1rem;
+        margin-bottom: 2px;
+        border: none;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     }
 
     #tallSpan {
@@ -130,6 +137,25 @@ onDestroy(unsub);
         align-items: center;
         width: 100%;
         /* background-color: white; */
+    }
+
+    #submitButton {
+
+        background-color: #0059BA;
+        border-radius: 10px;
+        height: 2rem;
+        width: 6rem;
+        color: white;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        transition-duration: 250ms;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:active {
+            background-color: #004187;
+        }
     }
 
 </style>
