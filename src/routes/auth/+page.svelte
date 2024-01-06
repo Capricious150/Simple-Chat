@@ -40,11 +40,12 @@ onDestroy(unsub);
 <div class="AuthWrapper">
 
     <div class="AuthCard">
-        <h3> Please sign in </h3>
+        <h2> Please sign in </h2>
         <span id="tallSpan">
 
         <input 
             class="AuthInput"
+            id="userInput"
             on:change ={(event) => {
                 //@ts-ignore
                 if (event.target && event.target.value) username = (event.target.value)}
@@ -55,9 +56,11 @@ onDestroy(unsub);
                 }
             }}
         />
-
+        <label for="userInput">Username</label>
         <input 
             class="AuthInput"
+            id="passInput"
+            type="password"
             on:change ={(event) => {
                 //@ts-ignore
                 if (event.target && event.target.value) {
@@ -70,17 +73,23 @@ onDestroy(unsub);
                 }
             }}
         />
+        <label for="passInput">Password</label>
         </span>
-        <button on:click={authUser(username, password)}>
+        <button 
+            on:click={authUser(username, password)}
+        >
             Submit
         </button>
     </div>
 </div>
 
 <style>
-    
-    h3 {
-        color: white;
+
+    button {
+        text-decoration: none;
+        box-shadow: none;
+        border: none;
+        background-color: inherit;
     }
 
     .AuthWrapper {
@@ -91,10 +100,11 @@ onDestroy(unsub);
         justify-content: center;
         align-items: center;
     }
-
+    
     .AuthCard {
         background-color: gray;
         padding: 1rem;
+        padding-block: 4rem;
         border-radius: 15px;
         display: flex;
         flex-direction: column;
@@ -106,11 +116,15 @@ onDestroy(unsub);
     .AuthInput {
         border-radius: 15px;
         width: 16rem;
+        height: 2rem;
+        font-size: 120%;
         max-width: 100%;
+        padding-left: 1rem;
+        margin-top: 1rem;
     }
 
     #tallSpan {
-        padding-block: 16vh;
+        padding-block: 12vh;
         display: flex;
         flex-direction: column;
         align-items: center;
