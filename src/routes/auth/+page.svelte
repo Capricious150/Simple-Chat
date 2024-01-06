@@ -7,6 +7,7 @@ import { onDestroy, onMount } from "svelte";
 
 
 let authedContent;
+let badAuth = false;
 const unsub = authedWritable.subscribe((value) => authedContent = value);
 
 onMount(() => {
@@ -24,13 +25,16 @@ let password = ''
 
 
 async function authUser (username, password) {
-    let response = await logInAsUser(username, password);
-
-    if (response.token) {
-        $authedWritable.authed = true;
-        $authedWritable.token = response.token;
-        $authedWritable.user = username;
-        goto('/home');
+    try {
+        let response = await logInAsUser(username, password);
+        if (response.token) {
+            $authedWritable.authed = true;
+            $authedWritable.token = response.token;
+            $authedWritable.user = username;
+            goto('/home');
+        }
+    } catch {
+        badAuth = true;
     }
 }
 
@@ -75,6 +79,10 @@ onDestroy(unsub);
         />
         <label for="passInput">Password</label>
         </span>
+
+        {#if badAuth}
+        <p>Incorrect username or password</p>
+        {/if}
         <button 
             id="submitButton"
             on:click={authUser(username, password)}
