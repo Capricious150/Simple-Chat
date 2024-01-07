@@ -8,3 +8,4 @@
 ##### In command prompt, navigate to /(root)/pocketbase and enter the command 'pocketbase serve'
 ##### In Terminal npm run dev -- --open
 ##### Run app in multiple browsers to test chat reactivity
+##### Update initalizePb function in root/pocketbaseStuff.js to add more testing IPs

@@ -3,5 +3,6 @@ export const authedWritable = writable({
     authed: false,
     token: "",
     user: "",
+    pocketIp: ""
 });
 
