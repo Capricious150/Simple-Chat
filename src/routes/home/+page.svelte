@@ -3,6 +3,7 @@
     import { initializePb } from '../../pocketbaseStuff';
     import { authedWritable } from '../../store';
     import { afterUpdate, beforeUpdate, onDestroy, onMount } from 'svelte';
+    import Leftbar from '../../components/Leftbar.svelte';
 
     let authedContent;
     const unsub = authedWritable.subscribe((value) => authedContent = value);
@@ -10,17 +11,18 @@
     let textHomeDiv;
     let shiftDown = false;
 
+
+
     onMount(async () => {
         const pb = await initializePb();
         if (pb === null) return null;
         pb.collection('posts').subscribe('*', (event) => {
-        // console.log(event.action)
-        // console.log(event.record)
-        postLists = [...postLists, event.record]
-    })
+            // console.log(event.record)
+            postLists = [...postLists, event.record]
+        })
     })
     async function getPosts() {
-
+        
         const pb = await initializePb();
         if (pb === null) return null;
         const posts = await pb.collection('posts').getFullList({
@@ -37,7 +39,7 @@
         // console.log(string);
         return string;
     }
-
+    
     async function postMessage (string) {
         // console.log('posting');
         // console.log(authedContent);
@@ -49,9 +51,10 @@
         const pb = await initializePb();
         if (pb === null) return null;
         const response = await pb.collection('posts').create({
-            recipient: 'main',
+            recipient: 'home',
             body: string,
-            poster: authedContent.user
+            poster: authedContent.user,
+            read: true
         })
 
         postBody = "";
@@ -62,7 +65,7 @@
         // console.log(element.scrollHeight - element.clientHeight <= element.scrollTop + 1)
         return element.scrollHeight - element.clientHeight <= element.scrollTop + 1;
     }
-
+    
     function handleScrolling(element) {
         element.scrollTop = element.scrollHeight;
     }
@@ -80,17 +83,18 @@
             }
         });
     }
-
+    
     onDestroy(async () => {
         unsub;
         const pb = await initializePb();
         if (pb === null) return null;
         pb.collection('posts').unsubscribe();
     });
-
+    
 </script>
 
-
+<div class="pageWrapper">
+<Leftbar authedContent = {authedContent} />
 <div class="chatWrapper">
     <div class="pageHead">
         <h1>Simple Chat App</h1>
@@ -125,26 +129,31 @@
         <!-- <button on:click={() => console.log(postLists)}>DEBUG BUTTON</button> -->
     </div>
 </div>
+</div>
 
 <style>
-    
+    .pageWrapper {
+        display: flex;
+    }    
     .chatWrapper {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        padding-left: 4rem;
     }
 
     .pageHead {
-        width: 80vw;
+        width: 65vw;
     }
 
     .textInput {
         height: 4rem;
         padding: 0.5rem;
-        width: 82vw;
+        width: 64vw;
         border-radius: 10px;
         margin-right: 1rem;
+        margin-left: 1rem;
         overflow-y: auto;
     }
 
@@ -152,7 +161,7 @@
         border: 2px darkgray solid;
         border-radius: 20px;
         height: 60vh;
-        width: 80vw;
+        width: 62vw;
         overflow-y: auto;
         padding-left: 2rem;
         padding-right: 2rem;
