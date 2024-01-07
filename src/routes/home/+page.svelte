@@ -14,7 +14,13 @@
 
 
     onMount(async () => {
-        const pb = await initializePb();
+        let pb;
+        try {
+            pb = new PocketBase(`http://${authedContent.pocketIp}:8080`)
+        } catch {
+            pb = initializePb();
+        }
+
         if (pb === null) return null;
         pb.collection('posts').subscribe('*', (event) => {
             // console.log(event.record)

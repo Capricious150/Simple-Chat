@@ -6,6 +6,10 @@ let authedContent;
 const unsub = authedWritable.subscribe((value) => authedContent = value);
 unsub();
 
+export type User = {
+    username: string,
+    password: string,
+}
 
 export async function initializePb() {
     let ip1 = "";
@@ -37,7 +41,7 @@ export async function initializePb() {
     return null;    
 }
 
-async function testPb(str) {
+async function testPb(str: string) {
 
   try {
         const pb = new PocketBase(str);
@@ -66,4 +70,20 @@ export async function logInAsUser (username, password) {
     const pb = await initializePb();
     if (pb === null) return null;
     return await pb.collection('users').authWithPassword(username, password);
+}
+
+export function checkForAuthData () {
+    if (authedContent.user && authedContent.token && authedContent.authed) {
+        return true;
+    } else return false;
+}
+
+export async function updateUser (user: User) {
+    let pb;
+    try {
+        pb = new PocketBase(`http://${authedContent.pocketIp}:8080`)
+    } catch {
+        pb = initializePb();
+    }
+    
 }
