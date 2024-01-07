@@ -99,7 +99,7 @@
     <div class="pageHead">
         <h1>Simple Chat App</h1>
     </div>
-    <div bind:this={textHomeDiv} class = "textHome">
+    <div bind:this={textHomeDiv} class = "ChatWindow">
         {#each postLists as post}
             <p class="post">{post.poster} ({
                 new Date(post.created).toLocaleTimeString()
@@ -155,16 +155,21 @@
         margin-right: 1rem;
         margin-left: 1rem;
         overflow-y: auto;
+        background-color: rgba(255, 255, 255, 0.8);
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        border: #1F1F1F solid 2px;
     }
 
-    .textHome {
+    .ChatWindow {
         border: 2px darkgray solid;
+        background-color: rgba(0, 0, 0, 0.85);
         border-radius: 20px;
         height: 60vh;
         width: 62vw;
         overflow-y: auto;
         padding-left: 2rem;
         padding-right: 2rem;
+        box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     }
 
     .buttonBox {

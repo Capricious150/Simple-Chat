@@ -23,6 +23,7 @@
         width: 15vw;
         min-width: 10rem;
         padding-left: 1vw;
+        background-color: rgba(0, 0, 0, 0.85);
         border-right: solid lightgray 2px;
     }
 

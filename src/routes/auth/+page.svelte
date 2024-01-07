@@ -44,7 +44,7 @@ onDestroy(unsub);
 <div class="AuthWrapper">
 
     <div class="AuthCard">
-        <h2> Please sign in </h2>
+        <h1> Please sign in </h1>
         <span id="tallSpan">
 
         <input 
@@ -78,11 +78,11 @@ onDestroy(unsub);
             }}
         />
         <label for="passInput">Password</label>
+        {#if badAuth}
+        <p style="color: red;">Incorrect username or password</p>
+        {/if}
         </span>
 
-        {#if badAuth}
-        <p>Incorrect username or password</p>
-        {/if}
         <button 
             id="submitButton"
             on:click={authUser(username, password)}
@@ -103,7 +103,7 @@ onDestroy(unsub);
     }
 
     .AuthWrapper {
-        padding-block: 20vh;
+        padding-block: 10vh;
         padding-inline: 30vw;
         display: flex;
         flex-direction: column;
@@ -112,7 +112,8 @@ onDestroy(unsub);
     }
     
     .AuthCard {
-        background-color: gray;
+        background-color: rgba(0, 0, 0, 0.85);
+        border: 2px darkgray solid;
         padding: 1rem;
         padding-block: 4rem;
         border-radius: 15px;
@@ -136,6 +137,7 @@ onDestroy(unsub);
         margin-bottom: 2px;
         border: none;
         box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        background-color: rgba(255, 255, 255, 0.9);
     }
 
     #tallSpan {
@@ -149,7 +151,7 @@ onDestroy(unsub);
 
     #submitButton {
 
-        background-color: #0059BA;
+        background-color: rgba(0, 89, 186, 0.85);
         border-radius: 10px;
         height: 2rem;
         width: 6rem;
@@ -162,7 +164,7 @@ onDestroy(unsub);
         }
 
         &:active {
-            background-color: #004187;
+            background-color: rgba(0, 65, 135, 0.85);
         }
     }
 
